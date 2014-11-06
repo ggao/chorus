@@ -4,7 +4,7 @@ class WorkfilePresenter < Presenter
 
     workfile = {
       :id => model.id,
-      :workspace => present(model.workspace, options.merge(:succinct => options[:succinct] || options[:list_view])),
+      :workspace => workspace,
       :file_name => model.file_name,
       :file_type => model.content_type,
       :latest_version_id => model.latest_workfile_version_id,
@@ -17,6 +17,10 @@ class WorkfilePresenter < Presenter
       :user_modified_at => model.user_modified_at,
       :status => model.status
     }
+
+    #unless options[:list_view]
+    #  workfile.merge!(:workspace => present(workspace, options.merge(:succinct => options[:succinct] || options[:list_view])))
+    #end
 
     unless rendering_activities?
       workfile.merge!({
@@ -34,5 +38,13 @@ class WorkfilePresenter < Presenter
 
   def recent_comment
     [model.most_recent_notes.last, model.most_recent_comments.last].compact.sort_by(&:created_at).last
+  end
+
+  def workspace
+    options[:parent_workspace] || workspace_present
+  end
+
+  def workspace_present
+    present(model.workspace, options.merge(:succinct => options[:succinct] || options[:list_view])) # unless options[:list_view]
   end
 end

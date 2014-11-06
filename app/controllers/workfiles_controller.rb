@@ -11,8 +11,9 @@ class WorkfilesController < ApplicationController
     authorize! :show, workspace
 
     workfiles = workspace.filtered_workfiles(params)
+    options = {:workfile_as_latest_version => true, :list_view => true}
 
-    present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true, :list_view => true}
+    present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true, :list_view => true, :parent_workspace => workspace_present(workspace, options)}
   end
 
   def show
@@ -87,6 +88,7 @@ class WorkfilesController < ApplicationController
 
   def workspace
     @workspace ||= Workspace.find(params[:workspace_id])
+    #@workspace ||= Workspace.includes(:owned_notes, :archiver).find(params[:workspace_id])
   end
 
   def authorize_edit_workfile
@@ -109,4 +111,9 @@ class WorkfilesController < ApplicationController
   def log_workfile_opened_event(workfile, user)
     OpenWorkfileEvent.create!(:workfile => workfile, :user => user)
   end
+
+  def workspace_present(workspace, options)
+    WorkspacePresenter.new(workspace, options.merge(:succinct => options[:succinct] || options[:list_view])).to_hash
+  end
+
 end
