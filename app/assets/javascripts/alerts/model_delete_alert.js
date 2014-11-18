@@ -3,11 +3,8 @@ chorus.alerts.ModelDelete = chorus.alerts.Confirm.extend({
         "click button.submit": "deleteModel"
     }),
     constructorName: "ModelDelete",
-
     focusSelector: "button.cancel",
-
     additionalClass: "error",
-
     persistent: true, //here for documentation, doesn't actually do anything as we've overwritten bindCallbacks
 
     bindCallbacks: function() {
@@ -29,7 +26,7 @@ chorus.alerts.ModelDelete = chorus.alerts.Confirm.extend({
     deleteMessageParams: $.noop,
 
     modelDeleted: function() {
-        this.closeModal();
+        this.closeModal(true);
         chorus.toast(this.deleteMessage, this.deleteMessageParams());
         if(this.model.entityType) {
             chorus.PageEvents.trigger(this.model.entityType + ":deleted", this.model);

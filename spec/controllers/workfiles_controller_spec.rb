@@ -335,6 +335,13 @@ describe WorkfilesController do
         Workfile.last.file_name.should == 'some_vis.png'
       end
 
+      it 'works with svg_data preceding file_name in posted params' do
+        expect {
+          post :create, :workspace_id => workspace.to_param, :workfile => {:svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>', :file_name => 'some_vis.png'}
+        }.to change(Workfile, :count).by(1)
+        Workfile.last.file_name.should == 'some_vis.png'
+      end
+
       it 'resolves name conflicts' do
         FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'some_vis.png')
         post :create, :workspace_id => workspace.to_param, :workfile => {:file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'}
@@ -777,6 +784,10 @@ describe WorkfilesController do
       it "should respond with success" do
         response.should be_success
       end
+
+      it "should delete related OpenWorkfileEvent records" do
+        OpenWorkfileEvent.where(:workfile_id => public_workfile.id, :user_id => user.id).count.should == 0
+      end
     end
   end
 
@@ -797,6 +808,8 @@ describe WorkfilesController do
       response.code.should == '200'
 
       workspace.workfiles.reload.count.should == 0
+      OpenWorkfileEvent.where(:workfile_id => workspace.workfiles.map(&:id), :user_id => user.id).count.should == 0
+
     end
 
     it 'preserves existing associations' do

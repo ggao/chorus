@@ -1,12 +1,23 @@
 chorus.views.DashboardProjectList = chorus.views.Base.extend({
     constructorName: "DashboardProjectListView",
     templateName: "dashboard/project_list",
-    noFilter: false,
+    useLoadingSection:true,
 
-    setup: function () {
+    setup: function (params) {
         this.projectCards = [];
-        this.listenTo(this.collection, 'filter:members_only', function () { this.triggerRender(false); }, this);
-        this.listenTo(this.collection, 'filter:all',          function () { this.triggerRender(true); }, this);
+        if(params.option === 'most_active') {
+            this.mostActive = true;
+            this.noFilter = true;
+        }
+        else {
+            this.mostActive = false;
+            if(params.option === 'all') {
+                this.noFilter = true;
+            }
+            else {
+                this.noFilter = false;
+            }
+        }
     },
 
     preRender: function () {
@@ -19,9 +30,16 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
     },
 
     postRender: function () {
-        _.each(this.projectCards, function(view) {
-            this.$el.append(view.render().el);
-        }, this);
+    
+        // revision inspired by http://ozkatz.github.io/avoiding-common-backbonejs-pitfalls.html
+        if (this.projectCards.length) {
+            var container = document.createDocumentFragment();
+            // render each subview, appending to our root element
+            _.each(this.projectCards, function(view) {
+                    container.appendChild(view.render().el);
+             });
+            this.$el.append(container);
+        }
     },
 
     triggerRender: function (bool) {
@@ -31,5 +49,5 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
 
     filter: function (project) {
         return this.noFilter || project.get('isMember');
-    }
+    } 
 });

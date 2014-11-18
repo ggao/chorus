@@ -31,7 +31,10 @@ class WorkfilesController < ApplicationController
   def create
     authorize! :can_edit_sub_objects, workspace
 
-    workfile = Workfile.build_for(params[:workfile].merge(:workspace => workspace, :owner => current_user))
+    merged_params = ActiveSupport::HashWithIndifferentAccess['file_name', params[:workfile][:file_name]]
+                      .merge(params[:workfile])
+                      .merge(:workspace => workspace, :owner => current_user)
+    workfile = Workfile.build_for(merged_params)
     workfile.update_from_params!(params[:workfile])
 
     present workfile, presenter_options: {:workfile_as_latest_version => true}, status: :created
@@ -52,12 +55,14 @@ class WorkfilesController < ApplicationController
   end
 
   def destroy
+    OpenWorkfileEvent.where(:workfile_id => workfile.id, :user_id => current_user).destroy_all
     workfile.destroy
     render :json => {}
   end
 
   def destroy_multiple
     authorize! :can_edit_sub_objects, workspace
+    OpenWorkfileEvent.where(:workfile_id => params[:workfile_ids], :user_id => current_user).destroy_all
     workfiles = workspace.workfiles.where(:id => params[:workfile_ids])
     workfiles.destroy_all
 

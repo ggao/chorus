@@ -40,7 +40,7 @@
             
             @include font-primary-link;
             display: inline-block;
-            max-width: 68%;
+            max-width: 85%;
             word-break: break-all;
             span {
                 max-width: none;
@@ -53,7 +53,7 @@
             overflow: hidden;
             padding-left: $padding-x;
             vertical-align: top;
-            zoom: 1;
+            word-wrap:break-word;
 
             .summary {
                 padding-bottom: 3px;
@@ -72,33 +72,33 @@
         }
 
         .job_item {
+        
+            .image {
+                width: 34px;
+            }
+            
             .frequency, .next_run, .last_run {
                 display: inline-block;                
             }
-            
             .frequency {
                 width: 120px;
             }
-
             .next_run {
                 width: 220px;
             }
-
             .last_run {
                 width: 400px;
             }
-
             .state {
                 .loading_spinner {
                     right: 0;
                     left: -10px;
                     top: 10px;
                 }
-
                 color: $color-text4;
                 position: absolute;
                 right: 20px;
-                top: 20px;
+                top: 10px;
             }
         }
 
@@ -202,7 +202,6 @@
             width: 18px;
             height: 1px;
         }
-
     }
 
     &.selectable, &.accordion {
@@ -246,8 +245,6 @@
             }
         }
     }
-
-
 }
 
 .item_tag_list {

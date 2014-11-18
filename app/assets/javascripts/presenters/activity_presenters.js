@@ -15,7 +15,8 @@
             if (this.isFailure()) {
                 return "/images/message_error_med.png";
             } else if (this.model.isSuccessfulImport()) {
-                return "/images/import_icon.png";
+//                 return "/images/jobs/data_import.png";
+                return "/images/jobs/task-data_import.svg";
             } else {
                 return this.model.author().fetchImageUrl({ size: "icon" });
             }
@@ -32,6 +33,15 @@
                 }
             } else {
                 return this.model.author().showUrl();
+            }
+        },
+
+        imageSrc: function() {
+            if (this.model.get("workfile").versionInfo) {
+                return this.model.get("workfile").versionInfo.iconUrl;
+            }
+            else {
+                return null;
             }
         },
 
@@ -54,6 +64,15 @@
 
         hasCommitMessage: function() {
             return this.model.hasCommitMessage();
+        },
+
+        isWorkfileImage: function() {
+            if(this.model.workfile()) {
+                return this.model.workfile().get("fileType") === "image";
+            }
+            else {
+                return false;
+            }
         },
 
         isPublished: function() {
@@ -641,7 +660,7 @@
             return self.model.get("destinationTable");
         },
 
-        // this is the one that returns a Dataset
+        // this is the one that returns Dataset
         destObjectOrNameInSchema: function(self) {
             var dataset = self.model["dataset"]();
             if (dataset.get("id")){
