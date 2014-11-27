@@ -1,3 +1,4 @@
+/* jshint ignore:start */
 Handlebars.registerHelper("debug", function(optionalValue) {
   console.log("Current Context");
   console.log("====================");
@@ -9,3 +10,4 @@ Handlebars.registerHelper("debug", function(optionalValue) {
     console.log(optionalValue);
   }
 });
+/* jshint ignore:end */
