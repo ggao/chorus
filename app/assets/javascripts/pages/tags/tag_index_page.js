@@ -1,6 +1,5 @@
 chorus.pages.TagIndexPage = chorus.pages.Base.extend({
     crumbs:[
-        { label:t("breadcrumbs.home"), url:"#/" },
         { label:t("breadcrumbs.tags") }
     ],
 

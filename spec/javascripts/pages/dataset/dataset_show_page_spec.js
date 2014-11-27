@@ -88,23 +88,29 @@ describe("chorus.pages.DatasetShowPage", function () {
         describe("breadcrumbs", function () {
             it("has the right breadcrumbs", function () {
                 var breadcrumbs = this.page.$("#breadcrumbs .breadcrumb a");
+                var i=0;
 
-                expect(breadcrumbs.length).toBe(5);
-
-                expect(breadcrumbs.eq(0).attr("href")).toBe("#/");
-                expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.home"));
-
-                expect(breadcrumbs.eq(1).attr("href")).toBe("#/data_sources");
-                expect(breadcrumbs.eq(1).text()).toBe(t("breadcrumbs.data_sources"));
-
-                expect(breadcrumbs.eq(2)).toHaveHref(this.dataset.dataSource().databases().showUrl());
-                expect(breadcrumbs.eq(2)).toContainText(this.dataset.dataSource().name());
-
-                expect(breadcrumbs.eq(3)).toHaveHref(this.dataset.database().showUrl());
-                expect(breadcrumbs.eq(3)).toContainText(this.dataset.database().name());
-
-                expect(breadcrumbs.eq(4).attr("href")).toBe(this.dataset.schema().showUrl());
-                expect(breadcrumbs.eq(4)).toContainText(this.dataset.schema().name());
+                expect(breadcrumbs.eq(i).attr("href")).toBe("#/");
+                expect(breadcrumbs.eq(i).text()).toBe(t("breadcrumbs.home"));
+                i++;
+                
+                expect(breadcrumbs.eq(i).attr("href")).toBe("#/data_sources");
+                expect(breadcrumbs.eq(i).text()).toBe(t("breadcrumbs.data_sources"));
+                i++;
+                
+                expect(breadcrumbs.eq(i)).toHaveHref(this.dataset.dataSource().databases().showUrl());
+                expect(breadcrumbs.eq(i)).toContainText(this.dataset.dataSource().name());
+                i++;
+                
+                expect(breadcrumbs.eq(i)).toHaveHref(this.dataset.database().showUrl());
+                expect(breadcrumbs.eq(i)).toContainText(this.dataset.database().name());
+                i++;
+                
+                expect(breadcrumbs.eq(i).attr("href")).toBe(this.dataset.schema().showUrl());
+                expect(breadcrumbs.eq(i)).toContainText(this.dataset.schema().name());
+                i++;
+                
+                expect(breadcrumbs.length).toBe(i);
 
                 expect(this.page.$("#breadcrumbs .breadcrumb .slug")).toContainText(this.dataset.name());
             });

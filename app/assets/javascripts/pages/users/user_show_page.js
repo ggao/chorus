@@ -14,7 +14,6 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
 
     crumbs: function() {
         return [
-            { label: t("breadcrumbs.home"), url: "#/" },
             { label: t("breadcrumbs.users"), url: "#/users" },
             { label: this.model.loaded ? this.model.displayShortName(20) : "..." }
         ];
