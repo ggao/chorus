@@ -3,6 +3,9 @@ chorus.views.BreadcrumbsView = chorus.views.Base.extend({
     templateName:"breadcrumbs",
 
     additionalContext: function () {
+       /* jshint ignore:start */
+       console.log ("BreadcrumbsView - > called additionalContext");
+       /* jshint ignore:end */
         return { breadcrumbs: _.result(this.options, 'breadcrumbs') };
     },
 
