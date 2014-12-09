@@ -1,4 +1,7 @@
 class Presenter
+
+  include ActionView::Helpers::SanitizeHelper
+
   def self.present(model_or_collection, view_context, options={})
     if model_or_collection.is_a?(ActiveRecord::Relation) || model_or_collection.is_a?(Enumerable)
       present_collection(model_or_collection, view_context, options)
@@ -26,8 +29,6 @@ class Presenter
     @model = model
     @view_context = view_context
   end
-
-  delegate :sanitize, :to => :@view_context
 
   attr_reader :model, :options
 
