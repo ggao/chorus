@@ -57,6 +57,20 @@ describe WorkfilePresenter, :type => :view do
       end
     end
 
+    context "when loading more than one workfile" do
+        let (:workfile_one) { workfiles(:tableau) }
+        let (:workfile_two) { workfiles(:searchquery) }
+
+      it "only loads the WorkspacePresenter once" do
+        mock.proxy(WorkspacePresenter).new.with_any_args.times(1)
+
+        parent_workspace = WorkspacePresenter.new(workspace, options.merge(:succinct => options[:succinct] || options[:list_view])).to_hash
+
+        WorkfilePresenter.new(workfile_one, view, { :parent_workspace => parent_workspace }).to_hash
+        WorkfilePresenter.new(workfile_two, view, { :parent_workspace => parent_workspace }).to_hash
+      end
+    end
+
     context "when the workfile has tags" do
       let(:workfile) { workfiles(:tagged) }
 
